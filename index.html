@@ -3,86 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="connect-src 'self' https://openlibrary.org;">
-    <title>Archive Terminal v3.1</title>
+    <title>The Grand Archive - Bookshelf View</title>
     <style>
-        :root { --glitch: #00ff41; --bg: #050505; }
-        body { background: var(--bg); color: var(--glitch); font-family: 'Courier New', monospace; padding: 20px; line-height: 1.2; }
-        
-        .terminal-nav { border-bottom: 2px solid var(--glitch); padding-bottom: 15px; margin-bottom: 30px; position: sticky; top: 0; background: var(--bg); z-index: 100; }
-        
+        :root { 
+            --wood: #3d2b1f; 
+            --shelf: #2a1d15;
+            --paper: #f4ecd8;
+            --gold: #d4af37;
+            --leather: #5e2c25;
+        }
+
+        body { 
+            background: #1a1a1a; 
+            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://www.transparenttextures.com/patterns/dark-leather.png');
+            color: var(--paper); 
+            font-family: 'Georgia', serif; 
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Bookshelf Structure */
+        .library-header { 
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--wood);
+            border-bottom: 8px solid var(--shelf);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        h1 { font-family: 'Times New Roman', serif; font-variant: small-caps; margin: 0; font-size: 2.5rem; letter-spacing: 2px; color: var(--gold); }
+
         #display { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
-            gap: 20px; 
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+            gap: 0px; 
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            border-left: 15px solid var(--wood);
+            border-right: 15px solid var(--wood);
+            background: #111;
         }
 
+        /* The Book Spine Aesthetic */
         .book-card {
-            border: 1px solid var(--glitch);
-            padding: 18px;
-            background: rgba(0, 255, 65, 0.02);
+            height: 350px;
+            background: var(--leather);
+            border-left: 5px solid rgba(255,255,255,0.1);
+            border-right: 8px solid rgba(0,0,0,0.3);
+            margin: 5px;
+            padding: 15px;
             text-decoration: none;
-            color: inherit;
+            color: var(--paper);
             display: flex;
             flex-direction: column;
-            min-height: 400px;
-            transition: all 0.2s ease-in-out;
-            animation: fadeIn 0.5s ease-out forwards;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
+            animation: slideIn 0.6s ease-out forwards;
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
 
         .book-card:hover {
-            background: rgba(0, 255, 65, 0.1);
-            box-shadow: 0 0 15px rgba(0, 255, 65, 0.4);
+            transform: scale(1.05) translateY(-10px);
+            z-index: 10;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+            filter: brightness(1.2);
         }
 
-        .title { font-weight: bold; font-size: 1.1rem; color: #fff; margin-bottom: 12px; height: 2.4em; overflow: hidden; }
+        /* Gold Foil text */
+        .title { 
+            font-weight: bold; 
+            font-size: 1rem; 
+            color: var(--gold); 
+            text-align: center;
+            border-top: 2px solid var(--gold);
+            border-bottom: 2px solid var(--gold);
+            padding: 10px 0;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
         
-        .meta-group { border-left: 2px solid rgba(0, 255, 65, 0.2); padding-left: 10px; margin-bottom: 15px; }
-        .meta-row { font-size: 0.8rem; margin-bottom: 4px; display: flex; }
-        .label { color: #666; width: 100px; flex-shrink: 0; }
-        .value { color: var(--glitch); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
+        .meta-group { font-size: 0.75rem; font-style: italic; opacity: 0.8; margin-bottom: 10px; }
+        
         .description { 
             font-size: 0.8rem; 
             line-height: 1.4; 
-            overflow-y: auto; 
-            color: #aaa;
-            border-top: 1px dashed rgba(0, 255, 65, 0.3);
-            padding-top: 12px;
+            overflow: hidden; 
+            color: var(--paper);
+            mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
             flex-grow: 1;
         }
 
-        .footer-id { font-size: 0.6rem; margin-top: 15px; opacity: 0.4; text-align: right; }
+        .footer-id { font-size: 0.6rem; margin-top: 10px; opacity: 0.5; font-family: monospace; }
 
+        /* Navigation controls */
         button {
-            background: var(--glitch);
-            color: #000;
+            background: var(--gold);
+            color: #222;
             border: none;
-            padding: 12px 24px;
-            font-family: inherit;
+            padding: 15px 30px;
+            font-family: serif;
+            font-variant: small-caps;
             font-weight: bold;
+            font-size: 1.1rem;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 20px;
+            border-radius: 3px;
+            box-shadow: 0 4px 0 #9e812b;
         }
 
-        button:hover { filter: brightness(1.2); }
-        button:disabled { background: #333; color: #666; cursor: not-allowed; }
+        button:active { transform: translateY(2px); box-shadow: 0 2px 0 #9e812b; }
+        button:disabled { background: #555; color: #888; box-shadow: none; }
         
-        .loading-text { font-style: italic; color: orange; }
+        .status-area { margin-top: 10px; font-style: italic; color: var(--gold); }
+        
+        /* Shelf background effect */
+        .shelf-row {
+            height: 20px;
+            background: var(--wood);
+            width: 100%;
+            border-bottom: 4px solid #1a1a1a;
+            box-shadow: inset 0 5px 10px rgba(0,0,0,0.5);
+        }
     </style>
 </head>
 <body>
 
-    <div class="terminal-nav">
-        <h1>DIRECTORY_SCANNER // BATCH_EXTRACT_12</h1>
-        <p id="status">ARCHIVE CONNECTION: STABLE</p>
-        <button id="scanBtn" onclick="runDeepScan()">EXECUTE 12-UNIT SCAN</button>
+    <div class="library-header">
+        <h1>The Grand Archive</h1>
+        <div class="status-area" id="status">Curator ready.</div>
+        <button id="scanBtn" onclick="runDeepScan()">Browse the Stacks</button>
     </div>
 
     <div id="display"></div>
+    <div class="shelf-row"></div>
 
 <script>
+    // Keeping your logic intact, just updated the UI feedback
     async function runDeepScan() {
         const display = document.getElementById('display');
         const status = document.getElementById('status');
@@ -97,9 +156,8 @@
 
         while (found < totalNeeded && attempts < 200) {
             attempts++;
-            status.innerHTML = `<span class="loading-text">SCANNING SECTOR [${attempts}]... FOUND: ${found}/${totalNeeded}</span>`;
+            status.innerHTML = `Searching volumes... Cataloging ${found} of ${totalNeeded}`;
             
-            // Random OLID range targeting dense archival zones
             const randomID = Math.floor(Math.random() * 28000000) + 100000;
             const olid = `OL${randomID}W`;
             
@@ -109,22 +167,18 @@
                 const bookData = await response.json();
 
                 if (bookData.title) {
-                    // Get Author
-                    let authorName = "DATA_REDACTED";
+                    let authorName = "Anonymous";
                     if (bookData.authors && bookData.authors.length > 0) {
                         try {
                             const authKey = bookData.authors[0].author.key;
                             const authRes = await fetch(`https://openlibrary.org${authKey}.json`);
                             const authData = await authRes.json();
-                            authorName = authData.name || "SUBJECT_UNKNOWN";
-                        } catch(e) { authorName = "LINK_ERROR"; }
+                            authorName = authData.name || "Unknown Author";
+                        } catch(e) { authorName = "Reference Lost"; }
                     }
 
-                    // Get Year
-                    const pubYear = bookData.first_publish_date || "UNKNOWN_EPOCH";
-
-                    // Get Description
-                    let desc = "NO ARCHIVAL SUMMARY DATA AVAILABLE.";
+                    const pubYear = bookData.first_publish_date || "Classic Era";
+                    let desc = "No summary found in the archives.";
                     if (typeof bookData.description === 'string') desc = bookData.description;
                     else if (bookData.description?.value) desc = bookData.description.value;
 
@@ -138,10 +192,10 @@
 
                     found++;
                 }
-            } catch (err) { /* Skipping failed sectors */ }
+            } catch (err) { }
         }
         
-        status.innerText = "SCAN COMPLETE. 12 UNITS EXTRACTED TO TERMINAL.";
+        status.innerText = "The selection is ready for your perusal.";
         btn.disabled = false;
     }
 
@@ -149,6 +203,10 @@
         const display = document.getElementById('display');
         const card = document.createElement('a');
         card.className = 'book-card';
+        // Assign a random leather color for variety
+        const colors = ['#5e2c25', '#2c3e50', '#2d5a27', '#4a2c5e', '#7e4a35'];
+        card.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        
         card.href = `https://openlibrary.org/works/${item.id}`;
         card.target = '_blank';
 
@@ -156,20 +214,14 @@
             <div class="title">${item.title}</div>
             
             <div class="meta-group">
-                <div class="meta-row">
-                    <span class="label">AUTHOR:</span>
-                    <span class="value">${item.author}</span>
-                </div>
-                <div class="meta-row">
-                    <span class="label">ORIGIN:</span>
-                    <span class="value">${item.year}</span>
-                </div>
+                <div>By ${item.author}</div>
+                <div>Circa ${item.year}</div>
             </div>
 
-            <div class="description">${item.desc.substring(0, 400)}${item.desc.length > 400 ? '...' : ''}</div>
+            <div class="description">${item.desc.substring(0, 250)}${item.desc.length > 250 ? '...' : ''}</div>
             
             <div class="footer-id">
-                RECORD_ID: ${item.id}
+                VOL. ${item.id}
             </div>
         `;
         display.appendChild(card);
