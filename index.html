@@ -3,189 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="connect-src 'self' https://openlibrary.org;">
-    <title>The Great Library Archive</title>
+    <title>The Grand Archive - Bookshelf View</title>
     <style>
-        :root {
-            --wood: #3d2b1f;
-            --shelf: #2c1e14;
-            --parchment: #f4e4bc;
+        :root { 
+            --wood: #3d2b1f; 
+            --shelf: #2a1d15;
+            --paper: #f4ecd8;
             --gold: #d4af37;
-            --paper: #fffcf5;
+            --leather: #5e2c25;
         }
 
-        body {
-            background-color: #1a120b;
-            background-image: url("https://www.transparenttextures.com/patterns/dark-leather.png");
-            color: var(--parchment);
-            font-family: 'Palatino', 'Georgia', serif;
+        body { 
+            background: #1a1a1a; 
+            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://www.transparenttextures.com/patterns/dark-leather.png');
+            color: var(--paper); 
+            font-family: 'Georgia', serif; 
             margin: 0;
-            padding: 20px;
+            padding: 0;
         }
 
-        header {
+        /* Bookshelf Structure */
+        .library-header { 
             text-align: center;
-            border-bottom: 3px double var(--gold);
-            margin-bottom: 40px;
-            padding-bottom: 20px;
+            padding: 40px 20px;
+            background: var(--wood);
+            border-bottom: 8px solid var(--shelf);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
 
-        h1 {
-            font-variant: small-caps;
-            letter-spacing: 2px;
-            color: var(--gold);
-            text-shadow: 1px 1px 2px black;
+        h1 { font-family: 'Times New Roman', serif; font-variant: small-caps; margin: 0; font-size: 2.5rem; letter-spacing: 2px; color: var(--gold); }
+
+        #display { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+            gap: 0px; 
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            border-left: 15px solid var(--wood);
+            border-right: 15px solid var(--wood);
+            background: #111;
         }
 
-        /* The Bookshelf Container */
-        #display {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 30px;
-            padding: 40px;
-            background: var(--shelf);
-            border: 15px solid var(--wood);
-            border-radius: 4px;
-            box-shadow: inset 0 0 50px #000, 0 10px 20px rgba(0,0,0,0.5);
-            min-height: 500px;
-        }
-
-        /* The Book Item */
+        /* The Book Spine Aesthetic */
         .book-card {
-            width: 180px;
-            height: 280px;
-            background: #8b0000; /* Default leather red */
-            border-left: 8px solid rgba(0,0,0,0.3);
-            border-right: 2px solid var(--gold);
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.4);
+            height: 350px;
+            background: var(--leather);
+            border-left: 5px solid rgba(255,255,255,0.1);
+            border-right: 8px solid rgba(0,0,0,0.3);
+            margin: 5px;
+            padding: 15px;
             text-decoration: none;
-            color: var(--parchment);
+            color: var(--paper);
             display: flex;
             flex-direction: column;
-            padding: 15px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
-            overflow: hidden;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
             animation: slideIn 0.6s ease-out forwards;
         }
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(-50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
 
         .book-card:hover {
             transform: scale(1.05) translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
             z-index: 10;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+            filter: brightness(1.2);
         }
 
-        /* Alternate Book Colors */
-        .book-card:nth-child(3n) { background: #2f4f4f; } /* Dark Slate */
-        .book-card:nth-child(3n+1) { background: #4b0082; } /* Indigo */
-        .book-card:nth-child(3n+2) { background: #556b2f; } /* Olive */
-
-        .title {
-            font-weight: bold;
-            font-size: 0.9rem;
+        /* Gold Foil text */
+        .title { 
+            font-weight: bold; 
+            font-size: 1rem; 
+            color: var(--gold); 
             text-align: center;
-            border-bottom: 1px solid var(--gold);
-            padding-bottom: 10px;
-            margin-bottom: 10px;
-            height: 4.5em;
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 4;
-            -webkit-box-orient: vertical;
+            border-top: 2px solid var(--gold);
+            border-bottom: 2px solid var(--gold);
+            padding: 10px 0;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+        
+        .meta-group { font-size: 0.75rem; font-style: italic; opacity: 0.8; margin-bottom: 10px; }
+        
+        .description { 
+            font-size: 0.8rem; 
+            line-height: 1.4; 
+            overflow: hidden; 
+            color: var(--paper);
+            mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+            flex-grow: 1;
         }
 
-        .author {
-            font-size: 0.75rem;
-            font-style: italic;
-            text-align: center;
-            color: var(--gold);
-        }
+        .footer-id { font-size: 0.6rem; margin-top: 10px; opacity: 0.5; font-family: monospace; }
 
-        .description {
-            display: none; /* Hide desc on shelf for cleaner look, or show on hover */
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            background: var(--paper);
-            color: #222;
-            font-size: 0.7rem;
-            padding: 10px;
-            height: 50%;
-            transform: translateY(100%);
-            transition: transform 0.3s ease;
-        }
-
-        .book-card:hover .description {
-            display: block;
-            transform: translateY(0);
-        }
-
-        .year-stamp {
-            margin-top: auto;
-            font-size: 0.65rem;
-            text-align: right;
-            opacity: 0.7;
-            border-top: 1px solid rgba(212, 175, 55, 0.3);
-            padding-top: 5px;
-        }
-
-        /* Controls */
-        .controls {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
+        /* Navigation controls */
         button {
             background: var(--gold);
-            color: #3d2b1f;
-            border: 2px solid #b8860b;
-            padding: 12px 30px;
-            font-family: 'Palatino', serif;
+            color: #222;
+            border: none;
+            padding: 15px 30px;
+            font-family: serif;
+            font-variant: small-caps;
             font-weight: bold;
-            font-size: 1rem;
+            font-size: 1.1rem;
             cursor: pointer;
-            box-shadow: 0 4px 0 #8b4513;
-            transition: all 0.1s;
+            margin-top: 20px;
+            border-radius: 3px;
+            box-shadow: 0 4px 0 #9e812b;
         }
 
-        button:active {
-            transform: translateY(3px);
-            box-shadow: 0 1px 0 #8b4513;
-        }
-
-        button:disabled {
-            background: #666;
-            box-shadow: none;
-            cursor: wait;
-        }
-
-        #status {
-            font-style: italic;
-            margin-top: 10px;
-            color: var(--gold);
+        button:active { transform: translateY(2px); box-shadow: 0 2px 0 #9e812b; }
+        button:disabled { background: #555; color: #888; box-shadow: none; }
+        
+        .status-area { margin-top: 10px; font-style: italic; color: var(--gold); }
+        
+        /* Shelf background effect */
+        .shelf-row {
+            height: 20px;
+            background: var(--wood);
+            width: 100%;
+            border-bottom: 4px solid #1a1a1a;
+            box-shadow: inset 0 5px 10px rgba(0,0,0,0.5);
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>The Bookshelf of Useless Books</h1>
-        <div class="controls">
-            <button id="scanBtn" onclick="curateBookshelf()">RESTOCK THE SHELF</button>
-            <p id="status">Librarian Status: Idle</p>
-        </div>
-    </header>
+    <div class="library-header">
+        <h1>The Grand Archive</h1>
+        <div class="status-area" id="status">Curator ready.</div>
+        <button id="scanBtn" onclick="runDeepScan()">Browse the Stacks</button>
+    </div>
 
-    <div id="display">
-        </div>
+    <div id="display"></div>
+    <div class="shelf-row"></div>
 
 <script>
-    async function curateBookshelf() {
+    // Keeping your logic intact, just updated the UI feedback
+    async function runDeepScan() {
         const display = document.getElementById('display');
         const status = document.getElementById('status');
         const btn = document.getElementById('scanBtn');
@@ -199,7 +156,7 @@
 
         while (found < totalNeeded && attempts < 200) {
             attempts++;
-            status.innerText = `Searching the catacombs... Found ${found}/${totalNeeded}`;
+            status.innerHTML = `Searching volumes... Cataloging ${found} of ${totalNeeded}`;
             
             const randomID = Math.floor(Math.random() * 28000000) + 100000;
             const olid = `OL${randomID}W`;
@@ -210,22 +167,22 @@
                 const bookData = await response.json();
 
                 if (bookData.title) {
-                    let authorName = "Unknown Scribe";
+                    let authorName = "Anonymous";
                     if (bookData.authors && bookData.authors.length > 0) {
                         try {
                             const authKey = bookData.authors[0].author.key;
                             const authRes = await fetch(`https://openlibrary.org${authKey}.json`);
                             const authData = await authRes.json();
                             authorName = authData.name || "Unknown Author";
-                        } catch(e) { authorName = "Anonymous"; }
+                        } catch(e) { authorName = "Reference Lost"; }
                     }
 
-                    const pubYear = bookData.first_publish_date || "Anno Unknown";
-                    let desc = "The contents of this tome remain a mystery.";
+                    const pubYear = bookData.first_publish_date || "Classic Era";
+                    let desc = "No summary found in the archives.";
                     if (typeof bookData.description === 'string') desc = bookData.description;
                     else if (bookData.description?.value) desc = bookData.description.value;
 
-                    renderBook({
+                    renderCard({
                         title: bookData.title,
                         author: authorName,
                         year: pubYear,
@@ -238,22 +195,34 @@
             } catch (err) { }
         }
         
-        status.innerText = "The shelf is replenished.";
+        status.innerText = "The selection is ready for your perusal.";
         btn.disabled = false;
     }
 
-    function renderBook(item) {
+    function renderCard(item) {
         const display = document.getElementById('display');
         const card = document.createElement('a');
         card.className = 'book-card';
+        // Assign a random leather color for variety
+        const colors = ['#5e2c25', '#2c3e50', '#2d5a27', '#4a2c5e', '#7e4a35'];
+        card.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        
         card.href = `https://openlibrary.org/works/${item.id}`;
         card.target = '_blank';
 
         card.innerHTML = `
             <div class="title">${item.title}</div>
-            <div class="author">${item.author}</div>
-            <div class="description">${item.desc.substring(0, 200)}...</div>
-            <div class="year-stamp">Est. ${item.year}</div>
+            
+            <div class="meta-group">
+                <div>By ${item.author}</div>
+                <div>Circa ${item.year}</div>
+            </div>
+
+            <div class="description">${item.desc.substring(0, 250)}${item.desc.length > 250 ? '...' : ''}</div>
+            
+            <div class="footer-id">
+                VOL. ${item.id}
+            </div>
         `;
         display.appendChild(card);
     }
